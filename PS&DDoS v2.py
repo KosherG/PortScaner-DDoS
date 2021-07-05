@@ -2,11 +2,12 @@ import socket
 import threading
 from queue import Queue
 import time
-
+import pyfiglet
 # Parameters to Configure:
 fake_ip = "15.15.15.15"  # Fake IP address for DDoS attack
 evil_packets = 50         # Number of packets to send in DDoS attack
 ip = ""
+banner = pyfiglet.figlet_format("Port \n   Scanner", font="slant")
 
 
 def fake_ip_set():
@@ -64,7 +65,7 @@ def range_scan():
         while not queue.empty():
             port = queue.get()
             if port_scan(port):
-                print("\nPort {} is open \n".format(port))
+                print("Port {} is open".format(port))
                 open_ports.append(port)
             else:
                 pass
@@ -72,7 +73,7 @@ def range_scan():
 
     def scanner():
         thread_list = []
-
+        start_time = time.time()
         for t in range(1000):
             thread = threading.Thread(target=worker)
             thread_list.append(thread)
@@ -80,7 +81,8 @@ def range_scan():
             thread.start()
         for thread in thread_list:
             thread.join()
-
+        end_time = time.time()
+        print("Scan completed in:  ", end_time - start_time, " sec")
         print("---------------------------------------------"
               "\nList of OPEN PORTS: ", *open_ports, sep="\n")
         while True:
@@ -138,8 +140,9 @@ def ddos():
 
 # Beginning of the program / Main Menu
 while True:
-    print("\n"*100,
-          "\n-----------------------------------\n"
+    print(banner,
+          "                           BY KosherG")
+    print("\n-----------------------------------\n"
           "        MAIN MENU              \n"
           "Choose from options below:")
     print("\n (1) Single Scan"
